@@ -1,4 +1,6 @@
 ## Installation
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcaesar-team%2Fcaesar-secure-message-server.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcaesar-team%2Fcaesar-secure-message-server?ref=badge_shield)
+
 
 ### 1. Start Containers and install dependencies: 
 On Linux:
@@ -39,3 +41,6 @@ Run PHP Unit Tests:
 ```bash
 docker-compose exec php bin/phpunit
 ```
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fcaesar-team%2Fcaesar-secure-message-server.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fcaesar-team%2Fcaesar-secure-message-server?ref=badge_large)
