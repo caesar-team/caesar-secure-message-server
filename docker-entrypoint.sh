@@ -9,4 +9,4 @@ fi
 chown -R www-data var
 
 vendor/bin/rr get --location bin/
-bin/rr serve --debug -vvv
+bin/rr serve -c .rr.dev.yaml --debug -vvv

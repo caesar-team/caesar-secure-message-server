@@ -4,7 +4,6 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile.dev
       args:
         COMPOSER_AUTH: ${COMPOSER_AUTH}
     depends_on:
@@ -13,6 +12,7 @@ services:
       - .:/var/www/html
     environment:
       - APP_ENV
+      - PHP_IDE_CONFIG
     expose:
       - "9000"
     ports:

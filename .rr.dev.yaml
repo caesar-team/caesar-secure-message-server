@@ -1,0 +1,15 @@
+http:
+  address: "0.0.0.0:8080"
+
+  uploads:
+    forbid: [".php", ".exe", ".bat"]
+
+  workers:
+    command: "php -d zend_extension=xdebug.so bin/console baldinof:roadrunner:worker"
+    relay: "unix://var/roadrunner.sock"
+    pool:
+      numWorkers: 1
+
+static:
+  dir:   "public"
+  forbid: [".php", ".htaccess"]
