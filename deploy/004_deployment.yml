@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: caesar-secure-message-server
-  namespace: dev-caesar-team
   labels:
     app: caesar-secure-message-server
     CICD_GIT_COMMIT: ${CICD_GIT_COMMIT}
@@ -19,7 +18,6 @@ spec:
     type: RollingUpdate 
   template:
     metadata:
-      namespace: dev-caesar-team
       labels:
         app: caesar-secure-message-server
         CICD_GIT_COMMIT: ${CICD_GIT_COMMIT}
