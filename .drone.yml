@@ -144,11 +144,13 @@ steps:
   when:
     branch: [ feature/* ]
 
-- <<: *stepDevelopBuild
+- name: build develop
+  <<: *stepDevelopBuild
   when:
     branch: [ develop ]
 
-- <<: *stepMasterBuild
+- name: build master
+  <<: *stepMasterBuild
   when:
     branch: [ master ]
   
