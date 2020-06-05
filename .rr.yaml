@@ -11,3 +11,8 @@ http:
 static:
   dir:   "public"
   forbid: [".php", ".htaccess"]
+
+limit:
+  services:
+    http:
+      maxMemory: 80

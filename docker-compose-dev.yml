@@ -6,6 +6,7 @@ services:
       context: .
       args:
         COMPOSER_AUTH: ${COMPOSER_AUTH}
+      dockerfile: Dockerfile.dev
     depends_on:
       - redis
     volumes:
