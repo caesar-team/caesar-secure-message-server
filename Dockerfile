@@ -33,6 +33,8 @@ RUN vendor/bin/rr get --location bin/
 
 # ---- Release ----
 FROM base AS release
+
+RUN echo "memory_limit=512M" >> /usr/local/etc/php/php.ini
 USER www-data
 COPY --chown=www-data:www-data . .
 COPY --chown=www-data:www-data --from=dependencies /var/www/html/bin bin
