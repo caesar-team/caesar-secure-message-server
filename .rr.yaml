@@ -16,3 +16,4 @@ limit:
   services:
     http:
       maxMemory: 80
+      maxJobs:  1
