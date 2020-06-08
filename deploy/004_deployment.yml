@@ -33,6 +33,8 @@ spec:
         envFrom:
         - configMapRef:
             name: caesar-server-config
+        - configMapRef:
+            name: caesar-secure-message-server-config
         - secretRef:
             name: caesar-server-secret
         - configMapRef:
