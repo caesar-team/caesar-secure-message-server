@@ -36,6 +36,9 @@ RUN vendor/bin/rr get --location bin/
 # ---- Release ----
 FROM base AS release
 
+ARG COMPOSER_AUTH
+ENV COMPOSER_AUTH=${COMPOSER_AUTH}
+
 USER www-data
 COPY --chown=www-data:www-data . .
 COPY --chown=www-data:www-data --from=dependencies /var/www/html/bin bin
