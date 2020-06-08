@@ -1,5 +1,5 @@
 http:
-  address: "0.0.0.0:8080"
+  address: ${RR_HTTP_ADDRESS}
 
   uploads:
     forbid: [".php", ".exe", ".bat"]
@@ -7,6 +7,9 @@ http:
   workers:
     command: "php bin/console baldinof:roadrunner:worker"
     relay: "unix://var/roadrunner.sock"
+    pool:
+      numWorkers: ${RR_POOL_NUM_WORKERS}
+      maxJobs:    ${RR_HTTP_MAX_JOBS}
 
 static:
   dir:   "public"
@@ -15,5 +18,4 @@ static:
 limit:
   services:
     http:
-      maxMemory: 80
-      maxJobs:  1
+      maxMemory: ${RR_HTTP_MAX_MEMORY}
