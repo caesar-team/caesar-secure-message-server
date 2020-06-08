@@ -13,6 +13,10 @@ services:
       - .:/var/www/html
     environment:
       - APP_ENV
+      - RR_HTTP_ADDRESS
+      - RR_POOL_NUM_WORKERS
+      - RR_HTTP_MAX_MEMORY
+      - RR_HTTP_MAX_JOBS
     expose:
       - "9000"
     ports:
