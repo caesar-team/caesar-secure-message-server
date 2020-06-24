@@ -14,6 +14,8 @@ RUN pecl install gnupg redis \
     && docker-php-ext-enable gnupg redis \
     && docker-php-ext-install sockets zip
 
+RUN echo "memory_limit=512M" >> /usr/local/etc/php/php.ini
+
 USER www-data
 ENV APP_ENV=prod
 
@@ -33,6 +35,10 @@ RUN vendor/bin/rr get --location bin/
 
 # ---- Release ----
 FROM base AS release
+
+ARG COMPOSER_AUTH
+ENV COMPOSER_AUTH=${COMPOSER_AUTH}
+
 USER www-data
 COPY --chown=www-data:www-data . .
 COPY --chown=www-data:www-data --from=dependencies /var/www/html/bin bin

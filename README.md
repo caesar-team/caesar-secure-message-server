@@ -34,8 +34,3 @@ Fix code style by running PHP CS Fixer:
 ```bash
 docker-compose exec php vendor/bin/php-cs-fixer fix
 ```
-
-Run PHP Unit Tests:
-```bash
-docker-compose exec php bin/phpunit
-```

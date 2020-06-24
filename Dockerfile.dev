@@ -34,7 +34,7 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS coreutils \
    && echo "xdebug.idekey=${XDEBUG_IDEKEY}" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.profiler_enable=${XDEBUG_PROFILER_ENABLE}" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.profiler_enable_trigger=${XDEBUG_PROFILER_ENABLE_TRIGGER}" >> /usr/local/etc/php/conf.d/xdebug.ini \
-   && echo "xdebug.profiler_output_dir=/var/www/GDL/var/profiler_snapshots" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.profiler_output_dir=/var/www/html/profiler_snapshots" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && echo "xdebug.max_nesting_level=9999" >> /usr/local/etc/php/conf.d/xdebug.ini \
    && apk del .build-deps
 
