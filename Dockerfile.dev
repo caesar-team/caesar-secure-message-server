@@ -1,0 +1,70 @@
+FROM php:7.4-cli-alpine as base
+
+WORKDIR /var/www/html
+
+RUN apk --update add \
+    build-base \
+    gpgme-dev \
+    gpgme \
+    autoconf \
+    libzip-dev \
+    zip
+
+RUN pecl install gnupg redis \
+    && docker-php-ext-enable gnupg redis \
+    && docker-php-ext-install sockets zip
+
+ARG XDEBUG_REMOTE_HOST=172.17.0.1
+ARG XDEBUG_REMOTE_ENABLE=1
+ARG XDEBUG_REMOTE_AUTOSTART=1
+ARG XDEBUG_REMOTE_CONNECT_BACK=1
+ARG XDEBUG_IDEKEY=PHPSTORM
+ARG XDEBUG_REMOTE_PORT=9000
+ARG XDEBUG_PROFILER_ENABLE=0
+ARG XDEBUG_PROFILER_ENABLE_TRIGGER=1
+
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS coreutils \
+   && yes | pecl install xdebug \
+   && docker-php-ext-enable xdebug \
+   && echo "xdebug.remote_enable=${XDEBUG_REMOTE_ENABLE}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.remote_autostart=${XDEBUG_REMOTE_AUTOSTART}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.remote_host=${XDEBUG_REMOTE_HOST}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.remote_port=${XDEBUG_REMOTE_PORT}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.remote_connect_back=${XDEBUG_REMOTE_CONNECT_BACK}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.idekey=${XDEBUG_IDEKEY}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.profiler_enable=${XDEBUG_PROFILER_ENABLE}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.profiler_enable_trigger=${XDEBUG_PROFILER_ENABLE_TRIGGER}" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.profiler_output_dir=/var/www/html/profiler_snapshots" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && echo "xdebug.max_nesting_level=9999" >> /usr/local/etc/php/conf.d/xdebug.ini \
+   && apk del .build-deps
+
+
+USER www-data
+ENV APP_ENV=prod
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_MEMORY_LIMIT -1
+
+COPY composer.json .
+COPY composer.lock .
+
+# ---- Dependencies ----
+FROM base AS dependencies
+# install vendors
+
+ARG COMPOSER_AUTH
+ENV COMPOSER_AUTH=${COMPOSER_AUTH}
+
+USER www-data
+RUN APP_ENV=prod composer install --prefer-dist --no-plugins --no-scripts --no-dev --optimize-autoloader
+RUN mkdir bin
+RUN vendor/bin/rr get --location bin/
+
+# ---- Release ----
+FROM base AS release
+USER www-data
+COPY --chown=www-data:www-data . .
+COPY --chown=www-data:www-data --from=dependencies /var/www/html/bin bin
+COPY --chown=www-data:www-data --from=dependencies /var/www/html/vendor /var/www/html/vendor
+RUN touch .env
+RUN composer require symfony/twig-bundle

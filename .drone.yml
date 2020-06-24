@@ -11,22 +11,16 @@ get:
   name: password
 ---
 kind: secret
-name: repository
-get:
-  path: caesar-team/data/registry
-  name: repo-security
----
-kind: secret
-name: registry
-get:
-  path: secret/data/registry
-  name: registry
----
-kind: secret
 name: develop_url
 get:
   path: secret/data/k8s-4xxi
   name: develop_url
+---
+kind: secret
+name: COMPOSER_AUTH
+get:
+  path: caesar-team/data/github
+  name: COMPOSER_AUTH
 ---
 kind: secret
 name: develop_token
@@ -63,34 +57,43 @@ type: docker
 name: 4xxi
 globals:
 - &confNoSaveBuild
-  dockerfile: ./config/docker/php/Dockerfile
+  dockerfile: ./Dockerfile
   repo: plugins/docker
-  tag: fourxxi
+  tags: fourxxi
   dry_run: true
   daemon_off: false
 
 - &confSaveBuild
-  dockerfile: ./config/docker/php/Dockerfile
-  repo: 
-    from_secret: repository
-  tag: ${DRONE_BRANCH}
+  dockerfile: ./Dockerfile
+  repo: caesarteam/caesar-secure-message-server
   username:
     from_secret: username
   password:
     from_secret: password
 
-- &stepCheckBuild
-  name: build test
+- &stepFeatureBuild
   image: plugins/docker
   settings:
     <<: *confNoSaveBuild
-
-- &stepMainBuild
-  name: build
+  
+- &stepDevelopBuild
   image: plugins/docker
+  environment:
+    COMPOSER_AUTH:
+      from_secret: COMPOSER_AUTH
   settings:
+    tags: [ "${DRONE_BRANCH}" ]
     <<: *confSaveBuild
-
+  
+- &stepMasterBuild
+  image: plugins/docker
+  environment:
+    COMPOSER_AUTH:
+      from_secret: COMPOSER_AUTH
+  settings:
+    tags: [ "${DRONE_BRANCH}", "latest" ]
+    <<: *confSaveBuild
+  
 - &stepDevelopDeploy
   name: deploy develop
   image: sinlead/drone-kubectl
@@ -136,21 +139,24 @@ globals:
       <{{build.link}}|*Build link*>
       {{/success}}
 steps:
-- <<: *stepCheckBuild
+- name: build feature
+  <<: *stepFeatureBuild
   when:
     branch: [ feature/* ]
 
-- <<: *stepMainBuild
-  when:
-    branch: [ develop, master ]
-
-- <<: *stepDevelopDeploy
+- name: build develop
+  <<: *stepDevelopBuild
   when:
     branch: [ develop ]
 
-- <<: *stepMasterDeploy
+- name: build master
+  <<: *stepMasterBuild
   when:
     branch: [ master ]
+  
+- <<: *stepDevelopDeploy
+  when:
+    branch: [ develop ]
 
 - <<: *stepNotifyToSlack
   when:

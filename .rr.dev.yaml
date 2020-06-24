@@ -5,7 +5,7 @@ http:
     forbid: [".php", ".exe", ".bat"]
 
   workers:
-    command: "php bin/console baldinof:roadrunner:worker"
+    command: "php -d zend_extension=xdebug.so bin/console baldinof:roadrunner:worker"
     relay: "unix://var/roadrunner.sock"
     pool:
       numWorkers: ${RR_POOL_NUM_WORKERS}

@@ -4,19 +4,16 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile.dev
       args:
         COMPOSER_AUTH: ${COMPOSER_AUTH}
+      dockerfile: Dockerfile.dev
     depends_on:
       - redis
     volumes:
       - .:/var/www/html
     environment:
       - APP_ENV
-      - RR_HTTP_ADDRESS
-      - RR_POOL_NUM_WORKERS
-      - RR_HTTP_MAX_MEMORY
-      - RR_HTTP_MAX_JOBS
+      - PHP_IDE_CONFIG
     expose:
       - "9000"
     ports:

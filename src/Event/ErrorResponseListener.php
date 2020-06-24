@@ -6,7 +6,9 @@ namespace App\Event;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Throwable;
 
 class ErrorResponseListener
@@ -27,7 +29,11 @@ class ErrorResponseListener
 
         $this->logError($exception);
 
-        $response = new JsonResponse(['message' => $exception->getMessage()], $exception->getStatusCode());
+        $statusCode = $exception instanceof HttpExceptionInterface
+            ? $exception->getStatusCode()
+            : Response::HTTP_BAD_REQUEST;
+
+        $response = new JsonResponse(['message' => $exception->getMessage()], $statusCode);
         $event->setResponse($response);
     }
 
