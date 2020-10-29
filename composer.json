@@ -7,25 +7,25 @@
     "ext-iconv": "*",
     "ext-redis": "*",
     "ext-sockets": "*",
-    "baldinof/roadrunner-bundle": "^1.2",
+    "baldinof/roadrunner-bundle": "1.2.1",
     "caesar/security-message-bundle": "^0.1.2",
-    "friendsofsymfony/rest-bundle": "^2.7",
-    "jms/serializer-bundle": "^3.4",
-    "nelmio/cors-bundle": "^2.0",
-    "sensio/framework-extra-bundle": "^5.2",
-    "sensiolabs/security-checker": "^6.0",
-    "snc/redis-bundle": "^2.1",
-    "symfony/console": "^4.1",
-    "symfony/flex": "^1.0",
-    "symfony/framework-bundle": "^4.0",
-    "symfony/monolog-bundle": "^3.5",
-    "symfony/twig-bundle": "^4.0",
-    "symfony/yaml": "^4.1"
+    "friendsofsymfony/rest-bundle": "2.7.4",
+    "jms/serializer-bundle": "3.5.0",
+    "nelmio/cors-bundle": "2.0.1",
+    "sensio/framework-extra-bundle": "5.5.4",
+    "sensiolabs/security-checker": "6.0.3",
+    "snc/redis-bundle": "2.1.13",
+    "symfony/console": "4.4.7",
+    "symfony/flex": "1.6.2",
+    "symfony/framework-bundle": "4.4.7",
+    "symfony/monolog-bundle": "3.5.0",
+    "symfony/twig-bundle": "4.4.8",
+    "symfony/yaml": "4.4.7"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.0",
-    "symfony/debug-pack": "^1.0",
-    "symfony/dotenv": "^4.1"
+    "friendsofphp/php-cs-fixer": "2.16.3",
+    "symfony/debug-pack": "1.0.8",
+    "symfony/dotenv": "4.4.16"
   },
   "config": {
     "preferred-install": {
